@@ -14,7 +14,11 @@ load_dotenv()
 #os.environ["LANGCHAIN_PROJECT"]="projectname"
 project_name = os.getenv("LANGCHAIN_PROJECT", "default_project")
 os.environ["LANGCHAIN_PROJECT"] = project_name
-os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
+
+api_key = os.getenv("LANGCHAIN_API_KEY")
+os.environ["LANGCHAIN_API_KEY"] = api_key
+
+#os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 os.environ["LANGCHAIN_TRACING-V2"] = "true"
 
 
