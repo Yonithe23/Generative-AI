@@ -11,7 +11,9 @@ from dotenv import load_dotenv
 load_dotenv()
 
 #langsmith tracking
-os.environ["LANGCHAIN_PROJECT"] = os.getenv("LANGCHAIN_PROJECT", "default_value")
+#os.environ["LANGCHAIN_PROJECT"]="projectname"
+project_name = os.getenv("LANGCHAIN_PROJECT", "default_project")
+os.environ["LANGCHAIN_PROJECT"] = project_name
 os.environ["LANGCHAIN_API_KEY"] = os.getenv("LANGCHAIN_API_KEY")
 os.environ["LANGCHAIN_TRACING-V2"] = "true"
 
@@ -41,6 +43,7 @@ api_key = st.sidebar.text_input("Enter Your OpenAI API Key:" , type = "password"
 llm = st.sidebar.selectbox("Select an Open AI Model", ["GPT-4 Turbo","GPT-4","GPT-4o"])
 temperature =st.sidebar.slider("Temperature" , min_value=0.0 ,max_value=1.0 ,value=0.7)
 max_tokens = st.sidebar.slider("Max Tokens" , min_value=50,max_value=300,value=150)
+
 
 st.write("what is you question ?")
 user_input = st.text_input("You:")
