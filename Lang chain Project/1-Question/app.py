@@ -13,12 +13,14 @@ load_dotenv()
 project_name = os.getenv("LANGCHAIN_PROJECT", "default_project")
 os.environ["LANGCHAIN_PROJECT"] = project_name
 
-# Ensure API key is set
+# Ensure API key is set safely
 api_key = os.getenv("OPENAI_API_KEY")
-os.environ["OPENAI_API_KEY"] = api_key
+
+if api_key:  # ✅ Only set if not None
+    os.environ["OPENAI_API_KEY"] = api_key
 
 # Enable LangChain Tracing
-os.environ["LANGCHAIN_TRACING_V2"] = "true"  # Fixed typo
+os.environ["LANGCHAIN_TRACING_V2"] = "true"
 
 # Define Prompt Template
 prompt = ChatPromptTemplate.from_messages(
@@ -31,11 +33,12 @@ prompt = ChatPromptTemplate.from_messages(
 # Function to generate response
 def generate_response(question, api_key, engine, temperature, max_tokens):
     if not api_key:
-        raise ValueError("❌ OpenAI API Key is missing.")
+        st.error("❌ OpenAI API Key is missing. Please enter it in the sidebar.")
+        return
     
-    openai.api_key = api_key  # Ensure API key is set
-    llm = ChatOpenAI(model=engine, openai_api_key=api_key)  # Fix API key issue
-    
+    openai.api_key = api_key  # Ensure API key is set properly
+    llm = ChatOpenAI(model=engine, openai_api_key=api_key)  # ✅ Pass API key explicitly
+
     output_parser = StrOutputParser()
     chain = prompt | llm | output_parser
     answer = chain.invoke({'question': question})
@@ -62,7 +65,8 @@ user_input = st.text_input("You:")
 if user_input and api_key:
     try:
         response = generate_response(user_input, api_key, engine, temperature, max_tokens)
-        st.write("🤖 Chatbot:", response)
+        if response:
+            st.write("🤖 Chatbot:", response)
     except Exception as e:
         st.error(f"❌ Error: {e}")
 
