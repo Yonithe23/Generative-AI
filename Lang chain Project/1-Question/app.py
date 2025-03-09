@@ -12,6 +12,7 @@ load_dotenv()
 
 #langsmith tracking
 #os.environ["LANGCHAIN_PROJECT"]="projectname"
+
 project_name = os.getenv("LANGCHAIN_PROJECT", "default_project")
 os.environ["LANGCHAIN_PROJECT"] = project_name
 
@@ -30,12 +31,13 @@ prompt = ChatPromptTemplate.from_messages(
 )
 
 
-def generate_repsonse( question,api_key,llm,temperature , max_tokens):
-    openai.api_key = api_key
-    llm = ChatOpenAI(model= llm)
-    out_parser = StrOutputParser()
-    chain = prompt| llm | out_parser
-    answer = chain.invoke({'question':question})
+def generate_response(question,api_key,engine,temperature,max_tokens):
+    openai.api_key=api_key
+
+    llm=ChatOpenAI(model=engine)
+    output_parser=StrOutputParser()
+    chain=prompt|llm|output_parser
+    answer=chain.invoke({'question':question})
     return answer
 
 #Title of the App
@@ -52,8 +54,11 @@ max_tokens = st.sidebar.slider("Max Tokens" , min_value=50,max_value=300,value=1
 st.write("what is you question ?")
 user_input = st.text_input("You:")
 
-if user_input:
-    response = generate_repsonse(user_input , api_key,llm ,temperature,max_tokens)
+if user_input and api_key:
+    response=generate_response(user_input,api_key,engine,temperature,max_tokens)
     st.write(response)
+
+elif user_input:
+    st.warning("Please enter the OPen AI aPi Key in the sider bar")
 else:
-    st.write("please provide the query")
+    st.write("Please provide the user input")
