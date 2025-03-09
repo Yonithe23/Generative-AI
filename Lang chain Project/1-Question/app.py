@@ -46,7 +46,9 @@ st.title("Question and Answer Chatbot With OpenAI")
 st.sidebar.title("setting")
 api_key = st.sidebar.text_input("Enter Your OpenAI API Key:" , type = "password")
 
-engine = st.sidebar.selectbox("Select an Open AI Model", ["GPT-4 Turbo","GPT-4","GPT-4o"])
+#engine = st.sidebar.selectbox("Select an Open AI Model", ["GPT-4 Turbo","GPT-4","GPT-4o"])
+engine=st.sidebar.selectbox("Select Open AI model",["gpt-4o","gpt-4-turbo","gpt-4"])
+
 temperature =st.sidebar.slider("Temperature" , min_value=0.0 ,max_value=1.0 ,value=0.7)
 max_tokens = st.sidebar.slider("Max Tokens" , min_value=50,max_value=300,value=150)
 
